@@ -3,6 +3,7 @@ steps:
   - name: 'gcr.io/cloud-builders/gsutil'
     args: ['-m', 'cp', '-r', '*', 'gs://${_BUCKET_NAME}/']
     dir: '.'
+    id: 'upload-files'
 
   # Invalidate CDN cache
   - name: 'gcr.io/cloud-builders/gcloud'
@@ -14,3 +15,10 @@ steps:
       - --path
       - '/*'
       - --async
+    id: 'invalidate-cache'
+
+substitutions:
+  _BUCKET_NAME: cloud-resume-challenge-2025.web.app # replace with your domain name
+
+options:
+  logging: CLOUD_LOGGING_ONLY
