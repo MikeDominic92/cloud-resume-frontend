@@ -1,0 +1,16 @@
+steps:
+  # Upload files to Cloud Storage
+  - name: 'gcr.io/cloud-builders/gsutil'
+    args: ['-m', 'cp', '-r', '*', 'gs://${_BUCKET_NAME}/']
+    dir: '.'
+
+  # Invalidate CDN cache
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - compute
+      - url-maps
+      - invalidate-cdn-cache
+      - website-url-map
+      - --path
+      - '/*'
+      - --async
